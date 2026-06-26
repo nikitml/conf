@@ -1,28 +1,27 @@
 # macos always-on jupyter lab
 
-# install uv, mkdir ~/wrk, cd ~/wrk, uv venv, activate, uv pip install jupyterlab
+# install uv, mkdir ~/jpuyter, uv tool install jupyterlab, uv tool update-shell, which jupyter-lab
 
 ###############
 
+# to make password hash 
+#   uv run --with jupyterlab python3 -c "from jupyter_server.auth import passwd; print(passwd('XXXXXXXX'))"
+
 cat > /Users/nikita/Library/Jupyter/launch-jupyter-lab.sh << EOF
-#!/usr/bin/env bash
+!/usr/bin/env bash
 set -euo pipefail
 
-export HOME="/Users/nikita"
+cd "/Users/nikita/jupyter"
 
-NOTEBOOK_DIR="/Users/nikita/wrk"
-JUPYTER_LAB="/Users/nikita/wrk/.venv/bin/jupyter-lab"
-
-cd "$NOTEBOOK_DIR"
-
-exec "$JUPYTER_LAB" \
-  --no-browser \
-  --ip=127.0.0.1 \
-  --port=8888 \
-  --ServerApp.open_browser=False \
-  --ServerApp.token='' \
-  --ServerApp.password=''
+exec "/Users/nikita/.local/bin/jupyter-lab"\
+    --no-browser --ip=127.0.0.1 --port=8888 \
+    --ServerApp.open_browser=False \
+    --IdentityProvider.token='' \
+    --PasswordIdentityProvider.password_required=True \
+    --PasswordIdentityProvider.hashed_password='...'
 EOF
+
+# chmod +x /Users/nikita/Library/Jupyter/launch-jupyter-lab.sh 
 
 ###############
 
